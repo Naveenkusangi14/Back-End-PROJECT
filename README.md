@@ -8,6 +8,7 @@ Databse is in anthore continent so we can use async/ await
 
 # Logic building | Register controller
  STEPS
+ 
     Step:1 - Get User detail from front-end 
     
     Step:2 - validation - not empty
