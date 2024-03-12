@@ -137,11 +137,28 @@ const loginUser = asyncHandler(async (req, res) => {
 
 //logout user
 
-
-
-const logoutUser = asyncHandler(async(req ,res) =>{
-   // Step-1 Find user
-   
+const logoutUser = asyncHandler(async (req, res) => {
+    // Step-1 Find user
+    User.findByIdAndUpdate(
+        req.user._id, // auth middleare we create the middle
+        {
+            $set: {
+                refreshToken: undefined
+            }
+        }, {
+        new: true
+    }
+    )
+    //cookie
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiError(200, {}, "User logout successful"))
 })
 
 export {
