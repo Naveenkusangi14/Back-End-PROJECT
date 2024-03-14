@@ -13,7 +13,7 @@ app.use(cors({
 // Parse incoming request bodies
 app.use(express({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-
+app.use(express.json())
 // Serve static files from the "public" directory
 app.use(express.static("public"));
 
@@ -23,5 +23,6 @@ app.use(cookieParser());
 // Import and use user routes
 import userRouter from "./routes/user.routes.js";
 app.use("/api/v1/users", userRouter);
+
 
 export { app };

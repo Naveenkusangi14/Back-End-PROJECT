@@ -18,8 +18,7 @@ router.route("/register").post(
     registerUser)
 
     //Login route
-router.route("/login").post(
-    loginUser)
+    router.route("/login").post(loginUser)
 
     //Logout 
 //SECURED ROUTES
