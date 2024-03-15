@@ -2,8 +2,8 @@ import { asyncHandler } from "../utiles/asynchandler.js";
 import { ApiError } from "../utiles/ApiError.js";
 import jwt from "jsonwebtoken"
 import { User } from "../models/user.models.js";
- // logout
-export const verifyJWT = asyncHandler(async (req, res, _ , next) => {
+// logout
+export const verifyJWT = asyncHandler(async (req, _, next) => {
     try {
         const token = req.cookies?.accessToken || req.header("Authization")?.replace("Bearer", "") // aIn cooike accessstoken will present for there will use access token to logout
         // If accessToken not there in the Cookies
