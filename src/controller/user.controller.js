@@ -162,44 +162,42 @@ const logoutUser = asyncHandler(async (req, res) => {
 })
 
 //refreshaccesstoken
-const refreshAccessToken = asyncHandler(async(req, res) => {
+const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken
     if (incomingRefreshToken) {
         throw new ApiError(401, "unauthorized request")
     }
     //verify
-   try {
-     const decodedToken = jwt.verify
-         (incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
-     const user = await User.findById(decodedToken?._id)
-     if (!user) {
-         throw new ApiError(401, "Inavalid incomingRefreshToken ")
-     }
-     if (incomingRefreshToken !== user?.refreshToken) {
-         throw new ApiError(401 , "REFRESH TOKEN IS EXPIRED OR USED ")
-     }
- 
-     const option = {
-         httpOnly: true,
-         secure: true
-     }
-     const { acccessToken, newrefreshToken } = await generateAccessAndRefereshToken(user._id)
-     return res
-         .status(200)
-         .cookie("accessToken", acccessToken)
-         .cookie("refreshToken", newrefreshToken)
-         .json(
-             new ApiResponse(
-                 200, {acccessToken,refreshToken:newrefreshToken},
-                 "ACESS TOKEN REFRESHED"
-             )
-         )
-   } catch (error) {
-    throw new ApiError(401 ,error?.message || "Invalid refresh token")
-   }
+    try {
+        const decodedToken = jwt.verify
+            (!incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
+        const user = await User.findById(decodedToken?._id)
+        if (!user) {
+            throw new ApiError(401, "Inavalid incomingRefreshToken ")
+        }
+        if (incomingRefreshToken !== user?.refreshToken) {
+            throw new ApiError(401, "REFRESH TOKEN IS EXPIRED OR USED ")
+        }
+
+        const option = {
+            httpOnly: true,
+            secure: true
+        }
+        const { acccessToken, newrefreshToken } = await generateAccessAndRefereshToken(user._id)
+        return res
+            .status(200)
+            .cookie("accessToken", acccessToken)
+            .cookie("refreshToken", newrefreshToken)
+            .json(
+                new ApiResponse(
+                    200, { acccessToken, refreshToken: newrefreshToken },
+                    "ACESS TOKEN REFRESHED"
+                )
+            )
+    } catch (error) {
+        throw new ApiError(401, error?.message || "Invalid refresh token")
+    }
 })
-
-
 
 
 export {
