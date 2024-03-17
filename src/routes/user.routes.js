@@ -21,7 +21,6 @@ router.route("/register").post(
 
 //Login route
 router.route("/login").post(loginUser)
-
 //Logout 
 //SECURED ROUTES
 router.route("/logout").post(verifyJWT, logoutUser)
